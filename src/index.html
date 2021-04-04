@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      background-color: teal;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>test site</h1>
+
+
+  <form action="#">
+
+
+
+
+    <input type="file">
+    <button type="submit">Submit</button>
+  </form>
+
+  <div class="result">
+    <h2>result</h2>
+  </div>
+
+
+
+  <script>
+
+    const { ipcRenderer } = require('electron');
+
+    const form = document.querySelector('form');
+    const file = document.querySelector('input');
+    const result = document.querySelector('.result');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const path = file.files[0].path;
+      ipcRenderer.send('send-path', path);
+
+
+    })
+
+    ipcRenderer.on('send-data', (event, data) => {
+
+      console.log(data);
+
+
+      let temp;
+      data.forEach((el) => {
+
+        temp += "<li>"
+
+        Object.keys(el).forEach((el2, index) => {
+          temp += `<span>${el[el2]}</span>`
+        })
+
+        temp += "</li>"
+
+      });
+      result.innerHTML = temp;
+      // result.innerHTML = `  
+      //               <li>
+      //       title : ${data.title}
+      //       path : ${data.body}
+      //         </li>
+      // `
+    })
+
+
+  </script>
+
+
+</body>
+
+</html>
